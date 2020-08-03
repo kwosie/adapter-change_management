@@ -37,17 +37,7 @@
             "name": "postRecord",
             "summary": "Update Change Ticket",
             "description": "Get the first ServiceNow change management ticket.",
-            "input": [
-                {
-                    "name": "changeTickets",
-                    "type": "object",
-                    "description": "A change management ticket document.",
-                    "schema": {
-                        "title": "changeTicket",
-                        "$ref": "changeRequest#/definitions/changeTicket"
-                    }
-                }
-            ],
+            "input": [],
             "output": {
                 "name": "changeTickets",
                 "type": "object",
