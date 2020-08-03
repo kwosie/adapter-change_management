@@ -206,7 +206,7 @@ class ServiceNowAdapter extends EventEmitter {
                         item.change_ticket_key = item.sys_id;
                         Object.keys(item).forEach((key) => validKeys.includes(key) || delete item[key]);
                     });
-                    jsonElements.changeTicket = jsonElements.result
+                    jsonElements.changeTickets = jsonElements.result
                     delete jsonElements.result
                     ticketData = jsonElements;
                     log.info(`Get Record key: ${JSON.stringify(ticketData)}`);
@@ -241,13 +241,12 @@ class ServiceNowAdapter extends EventEmitter {
                     log.info(`Post Record key 1: ${JSON.stringify(jsonElements)}`);
                 if (jsonElements.result) {
                     ticketData = new Object();
-                    jsonElements.result.change_ticket_number = jsonElements.result.number;
-                    jsonElements.result.change_ticket_key = jsonElements.result.sys_id;
-                    Object.keys(jsonElements.result).forEach((key) => validKeys.includes(key) || delete jsonElements.result[key]);
-                    log.info(`Post Record key 2: ${JSON.stringify(jsonElements)}`);
-                    jsonElements.changeTicket = jsonElements.result
-                    delete jsonElements.result
-                    ticketData = jsonElements;
+                    let firstTicket = jsonElements.result
+                    firstTicket.change_ticket_number = firstTicket.number;
+                    firstTicket.change_ticket_key = firstTicket.sys_id;
+                    Object.keys(firstTicket).forEach((key) => validKeys.includes(key) || delete firstTicket[key]);
+                    log.info(`Post Record key 2: ${JSON.stringify(firstTicket)}`);
+                    ticketData.changeTicket = firstTicket
                     log.info(`Post Record key: ${JSON.stringify(ticketData)}`);
                 }
             }
