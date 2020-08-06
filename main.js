@@ -200,16 +200,11 @@ class ServiceNowAdapter extends EventEmitter {
             if (responseData && responseData.body) {
                 var jsonElements = JSON.parse(responseData.body);
                 if (jsonElements.result) {
-                    ticketData = new Object();
+                    ticketData = { changeTickets: [] }
                     jsonElements.result.forEach((item) => {
-                        item.change_ticket_number = item.number;
-                        item.change_ticket_key = item.sys_id;
-                        Object.keys(item).forEach((key) => validKeys.includes(key) || delete item[key]);
+                        ticketData.changeTickets.push(this.populateTicketData(item));
                     });
-                    jsonElements.changeTickets = jsonElements.result
-                    delete jsonElements.result
-                    ticketData = jsonElements;
-                    log.info(`Get Record key: ${JSON.stringify(ticketData)}`);
+                    log.info(`Get Record: ${JSON.stringify(ticketData)}`);
                 }
             }
 
@@ -238,21 +233,27 @@ class ServiceNowAdapter extends EventEmitter {
             let ticketData = null;
             if (responseData && responseData.body) {
                 var jsonElements = JSON.parse(responseData.body);
-                    log.info(`Post Record key 1: ${JSON.stringify(jsonElements)}`);
                 if (jsonElements.result) {
                     ticketData = new Object();
-                    let firstTicket = jsonElements.result
-                    firstTicket.change_ticket_number = firstTicket.number;
-                    firstTicket.change_ticket_key = firstTicket.sys_id;
-                    Object.keys(firstTicket).forEach((key) => validKeys.includes(key) || delete firstTicket[key]);
-                    log.info(`Post Record key 2: ${JSON.stringify(firstTicket)}`);
-                    ticketData.changeTicket = firstTicket
-                    log.info(`Post Record key: ${JSON.stringify(ticketData)}`);
+                    ticketData.changeTicket = this.populateTicketData(jsonElements.result);
+                    log.info(`Post Record: ${JSON.stringify(ticketData)}`);
                 }
             }
 
             return callback(ticketData, errorMessage);
         });
+    }
+
+    populateTicketData(inputTicketData) {
+        let ticketData = new Object();
+        ticketData.change_ticket_number = inputTicketData.number;
+        ticketData.active = inputTicketData.active;
+        ticketData.priority = inputTicketData.priority;
+        ticketData.description = inputTicketData.description;
+        ticketData.work_start = inputTicketData.work_start;
+        ticketData.work_end = inputTicketData.work_end;
+        ticketData.change_ticket_key = inputTicketData.sys_id;
+        return ticketData;
     }
 }
 
