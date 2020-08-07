@@ -200,9 +200,9 @@ class ServiceNowAdapter extends EventEmitter {
             if (responseData && responseData.body) {
                 var jsonElements = JSON.parse(responseData.body);
                 if (jsonElements.result) {
-                    ticketData = { changeTickets: [] }
+                    ticketData = []
                     jsonElements.result.forEach((item) => {
-                        ticketData.changeTickets.push(this.populateTicketData(item));
+                        ticketData.push(this.populateTicketData(item));
                     });
                     log.info(`Get Record: ${JSON.stringify(ticketData)}`);
                 }
@@ -235,7 +235,7 @@ class ServiceNowAdapter extends EventEmitter {
                 var jsonElements = JSON.parse(responseData.body);
                 if (jsonElements.result) {
                     ticketData = new Object();
-                    ticketData.changeTicket = this.populateTicketData(jsonElements.result);
+                    ticketData = this.populateTicketData(jsonElements.result);
                     log.info(`Post Record: ${JSON.stringify(ticketData)}`);
                 }
             }
